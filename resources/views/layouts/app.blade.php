@@ -13,7 +13,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+    <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
 
     <style>
         body {
@@ -22,6 +22,21 @@
 
         .fa-btn {
             margin-right: 6px;
+        }
+        
+        #footer {
+           position:fixed;
+           left:0px;
+           bottom:0px;
+           height:30px;
+           width:100%;
+           background:#999;
+        }
+        
+        /* IE 6 */
+        * html #footer {
+           position:absolute;
+           top:expression((0-(footer.offsetHeight)+(document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)+(ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop))+'px');
         }
     </style>
 </head>
@@ -93,7 +108,15 @@
     </nav>
 
     @yield('content')
-
+    
+    <div id="footer">
+        <div class="row">
+            <div class="col-md-11">
+                <p><strong>Soporte:</strong><a href="mailto:craftsmancloud@gmail.com">craftsmancloud@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
+    
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
