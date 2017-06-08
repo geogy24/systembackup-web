@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>System Backup</title>
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
@@ -24,20 +26,7 @@
             margin-right: 6px;
         }
         
-        #footer {
-           position:fixed;
-           left:0px;
-           bottom:0px;
-           height:30px;
-           width:100%;
-           background:#999;
-        }
         
-        /* IE 6 */
-        * html #footer {
-           position:absolute;
-           top:expression((0-(footer.offsetHeight)+(document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)+(ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop))+'px');
-        }
     </style>
 </head>
 <body id="app-layout">
@@ -55,13 +44,19 @@
 
                 <!-- Branding Image -->
                 @if (!Auth::guest())
-                    <a class="navbar-brand" href="{{ url('/home') }}">
-                        Backup
+                <div>
+                    <a class="navbar-brand logo" href="{{ url('/home') }}">
+                        <img src="/img/logo.png" style="width:32px;"/>
                     </a>
+                    <p class="logo-name">System Backup</p>
+                    </div>
                 @else
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        Backup
+                <div>
+                    <a class="navbar-brand logo" href="{{ url('/') }}">
+                        <img src="/img/logo.png" style="width:32px;"/>
                     </a>
+                    <p class="logo-name">System Backup</p>
+                    </div>
                 @endif
             </div>
 
@@ -111,8 +106,11 @@
     
     <div id="footer">
         <div class="row">
-            <div class="col-md-11">
-                <p><strong>Soporte:</strong><a href="mailto:craftsmancloud@gmail.com">craftsmancloud@gmail.com</a></p>
+            <div class="col-md-11 text-center">
+                <p><strong>Soporte:</strong><a href="mailto:craftsmancloud@gmail.com"> craftsmancloud@gmail.com</a></p>
+            </div>
+            <div class="col-md-11 text-center">
+                <sub><p>Versión 0.0.1</p></sub>
             </div>
         </div>
     </div>
