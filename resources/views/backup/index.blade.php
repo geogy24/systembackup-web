@@ -1,7 +1,11 @@
 @extends('layouts.main')
 
+@section('title', 'Copias')
+
+@section('subtitle', 'Listado de copias registradas')
+
 @section('content')
-    <div class="container">
+    <!--<div class="container">-->
         <div class="panel panel-default">
             <div class="panel-body">
                 <table class="table table-striped table-hover">
@@ -39,5 +43,5 @@
                 </table>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 @endsection

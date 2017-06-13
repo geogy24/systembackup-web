@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('title', 'Escritorio')
+
+@section('subtitle', 'Estado de la sesión')
+
 @section('content')
 <div class="container">
     <div class="row">

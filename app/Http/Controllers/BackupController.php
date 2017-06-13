@@ -19,7 +19,7 @@ class BackupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = User::find(Auth::user()->user_id);
         
@@ -27,6 +27,8 @@ class BackupController extends Controller
             $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
             
             if( file_exists($directory)) {
+                $request->session()->flash('copias', true);
+                
                 return view('backup.index', ['directory' => $directory, 'files' => scandir($directory)]);
             } else {
                 echo '!exists';
