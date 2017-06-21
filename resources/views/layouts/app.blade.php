@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Service Backup</title>
+    <title>System Backup</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     
     <!-- Bootstrap Core CSS -->
