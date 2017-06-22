@@ -14,13 +14,38 @@ use DB;
 
 class LogController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $logs = Log::All();
+        $users = User::where('user_type_id', 2)->get();
+        
+        return view('log.index', ['logs' => $logs, 'users' => $users]);
+    }
+    
+    
+    private function verifyIfExistsDataFromRequest(Request $request)
+    {
+        $exists = false;
+        
+        if (isset($request->businessName) && !empty($request->businessName) &&
+            isset($request->typeLog) && !empty($request->typeLog) &&
+            isset($request->title) && !empty($request->title) && 
+            isset($request->description) && !empty($request->description)) {
+            $exists = true;
+        }
+        
+        return $exists;
+    }
+    
     private function findUserIDByBusinessName($businessName)
     {
         $userID = 0;
         $users = User::where('business', 'LIKE' , '%' . $businessName . '%')->get();
-        
-        /*$user = DB::table('users')
-                      ->whereRaw('business = "' . $businessName . '"')->get();*/
         
         foreach($users as $user) {
             $userID = $user->user_id;
@@ -31,18 +56,21 @@ class LogController extends Controller
     
     public function store(Request $request)
     {
-        $response = array('created' => true);
-        $userID = $this->findUserIDByBusinessName('prueba');
+        $response = array('created' => false);
         
-        if ($userID > 0){
-            $log = new Log();
-            $log->type_log = $request->typeLog;
-            $log->title = $request->title;
-            $log->description = $request->description;
-            $log->user_id = $userID;
-            $log->save();
+        if ($this->verifyIfExistsDataFromRequest($request)) {
+            $userID = $this->findUserIDByBusinessName($request->businessName);
             
-            $response = array('created' => true);
+            if ($userID > 0){
+                $log = new Log();
+                $log->type_log = $request->typeLog;
+                $log->title = $request->title;
+                $log->description = $request->description;
+                $log->user_id = $userID;
+                $log->save();
+                
+                $response = array('created' => true);
+            }
         }
         
         return response()->json($response);

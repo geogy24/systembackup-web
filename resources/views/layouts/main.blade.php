@@ -88,6 +88,7 @@
                                         <li><a href="{{ url('users/create') }}">Registrar</a></li>
                                     </ul>
                                 </li>
+                                <li><a href="{{ url('logs') }}"><i class="fa fa-fw fa-file" aria-hidden="true"></i> Logs</a></li>
                                 <li><a href=""><i class="fa fa-fw fa-question-circle" aria-hidden="true"></i> Ayuda</a></li>
                             @elseif (Auth::user()->user_type_id == 2)
                                 @if(Session::get('copias'))
