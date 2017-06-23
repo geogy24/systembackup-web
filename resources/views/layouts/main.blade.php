@@ -26,6 +26,9 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        
+        <!-- jQuery -->
+        <script src="/vendor/jquery/jquery.js"></script>
     
     </head>
 
@@ -139,9 +142,6 @@
         </div>
         
         <!-- /#wrapper -->
-    
-        <!-- jQuery -->
-        <script src="/vendor/jquery/jquery.js"></script>
     
         <!-- Bootstrap Core JavaScript -->
         <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>

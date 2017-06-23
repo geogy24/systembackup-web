@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('backups', 'BackupController');
     Route::get('backups/downloadfile/{file_name}', 'BackupController@downloadFile');
     
+    Route::get('logs/{id}', 'LogController@listClient');
     Route::get('logs', 'LogController@index');
 });
 

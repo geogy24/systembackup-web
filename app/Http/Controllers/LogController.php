@@ -27,6 +27,22 @@ class LogController extends Controller
         return view('log.index', ['logs' => $logs, 'users' => $users]);
     }
     
+    /**
+     * Display a listing of the resource by client id.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listClient($identification)
+    {
+        if ($identification != 0) {
+            $logs = Log::where('user_id', $identification)->get();
+        } else {
+            $logs = Log::all();
+        }
+        
+        return view('log.list', ['logs' => $logs]);
+    }
+    
     
     private function verifyIfExistsDataFromRequest(Request $request)
     {

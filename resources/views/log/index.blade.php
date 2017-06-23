@@ -5,6 +5,19 @@
 @section('subtitle', 'Listado de logs')
 
 @section('content')
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+           $('select[name="select_user"]').change(function(){
+               $.ajax({
+                    url: "{{ url('logs/') }}/" + $(this).val(),
+                })
+                .done(function( data ) {
+                    $('#div_log').html(data);
+                });
+           });
+        });
+    </script>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="input-group">
@@ -18,36 +31,8 @@
             </div>
         </div>
     </div>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Tipo</th>
-                <th>Titulo</th>
-                <th>Descripción</th>
-                <th>Fecha Creación</th>
-                <th>Usuario</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($logs as $log)
-                <tr>
-                    <td>
-                        @if ($log->type_log == 'information')
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        @elseif ($log->type_log == 'error')
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        @else
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                        @endif
-                    </td>
-                    <td>{{ $log->title }}</td>
-                    <td>{{ $log->description }}</td>
-                    <td>{{ $log->created_at }}</td>
-                    <td>{{ $log->user->name }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-        <tfoot></tfoot>
-    </table>
+    
+    <div id="div_log">
+        @include('log.list')
+    </div>
 @endsection
