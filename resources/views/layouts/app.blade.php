@@ -58,6 +58,9 @@
                     <li>
                         <a class="page-scroll" href="#contact">Contacto</a>
                     </li>
+                    <li>
+                        <a href="{{ url('/login') }}" >Inicia sesión</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
