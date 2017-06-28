@@ -98,7 +98,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find(Auth::user()->user_id);
+        $user = User::find($id);
         
         if($user != null){
             return view('auth.register', ['user' => $user]);
