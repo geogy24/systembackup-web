@@ -15,7 +15,7 @@
                         <th>Fecha creación</th>
                         <th>
                             <center>
-                                Descargar
+                                Opciones
                             </center>
                         </th>
                     </tr>
@@ -29,6 +29,9 @@
                                 <td>{{ date("F d Y H:i:s", filectime($directory . '/' . $files[$i])) }}</td>
                                 <td>
                                     <center>
+                                        <a href="{{ url('backups/deletefile', ['file' => $files[$i]]) }}">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                        </a>
                                         <a href="{{ url('backups/downloadfile', ['file' => $files[$i]]) }}">
                                             <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                                         </a>

@@ -65,6 +65,22 @@ class BackupController extends Controller
             echo 'Error: usuario no encontrado';
         }
     }
+    
+    public function deleteFile(Request $request)
+    {
+        $user = User::find(Auth::user()->user_id);
+        
+        if($user != null){
+            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
+            $fileToDeleted = $directory . '/' . $request->file_name;
+            
+            if(file_exists($fileToDeleted)) {
+                if (unlink($fileToDeleted)) {
+                    return redirect()->action('BackupController@index');
+                }
+            }
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
