@@ -84,6 +84,7 @@
                     <ul class="nav navbar-nav side-nav">
                         @if (!Auth::guest())
                             @if (Auth::user()->user_type_id == 1)
+                                <li><a href="{{ url('backups/showfiles') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
                                 <li>
                                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Usuarios <i class="fa fa-fw fa-caret-down"></i></a>
                                     <ul  id="demo" class="collapse">

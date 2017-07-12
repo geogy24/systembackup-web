@@ -2106,3 +2106,28 @@
 [12-Jun-2017 02:54:09 UTC] PHP  72. Illuminate\View\View->getContents() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/View/View.php:120
 [12-Jun-2017 02:54:09 UTC] PHP  73. Illuminate\View\Engines\CompilerEngine->get() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/View/View.php:149
 [12-Jun-2017 02:54:09 UTC] PHP  74. Illuminate\View\Engines\PhpEngine->evaluatePath() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php:59
+[12-Jul-2017 22:47:23 UTC] PHP Parse error:  syntax error, unexpected '(', expecting ',' or ';' in /home/ubuntu/workspace/backup/app/Http/Controllers/BackupController.php on line 15
+[12-Jul-2017 22:47:23 UTC] PHP Stack trace:
+[12-Jul-2017 22:47:23 UTC] PHP   1. {main}() /home/ubuntu/workspace/backup/public/index.php:0
+[12-Jul-2017 22:47:23 UTC] PHP   2. Illuminate\Foundation\Http\Kernel->handle() /home/ubuntu/workspace/backup/public/index.php:54
+[12-Jul-2017 22:47:23 UTC] PHP   3. Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:99
+[12-Jul-2017 22:47:23 UTC] PHP   4. Illuminate\Pipeline\Pipeline->then() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:132
+[12-Jul-2017 22:47:23 UTC] PHP   5. call_user_func:{/home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:103}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:103
+[12-Jul-2017 22:47:23 UTC] PHP   6. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:103
+[12-Jul-2017 22:47:23 UTC] PHP   7. call_user_func:{/home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:32}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:32
+[12-Jul-2017 22:47:23 UTC] PHP   8. Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:32
+[12-Jul-2017 22:47:23 UTC] PHP   9. call_user_func_array:{/home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:136}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:136
+[12-Jul-2017 22:47:23 UTC] PHP  10. Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:136
+[12-Jul-2017 22:47:23 UTC] PHP  11. Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/CheckForMaintenanceMode.php:44
+[12-Jul-2017 22:47:23 UTC] PHP  12. call_user_func:{/home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:52}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:52
+[12-Jul-2017 22:47:23 UTC] PHP  13. Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php:52
+[12-Jul-2017 22:47:23 UTC] PHP  14. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php:246
+[12-Jul-2017 22:47:23 UTC] PHP  15. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Router.php:675
+[12-Jul-2017 22:47:23 UTC] PHP  16. Illuminate\Routing\Router->findRoute() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Router.php:691
+[12-Jul-2017 22:47:23 UTC] PHP  17. Illuminate\Routing\Router->substituteBindings() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Router.php:825
+[12-Jul-2017 22:47:23 UTC] PHP  18. Illuminate\Routing\Router->substituteImplicitBindings() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Router.php:842
+[12-Jul-2017 22:47:23 UTC] PHP  19. Illuminate\Routing\Route->signatureParameters() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Router.php:857
+[12-Jul-2017 22:47:23 UTC] PHP  20. ReflectionMethod->__construct() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Route.php:280
+[12-Jul-2017 22:47:23 UTC] PHP  21. spl_autoload_call() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Route.php:280
+[12-Jul-2017 22:47:23 UTC] PHP  22. Composer\Autoload\ClassLoader->loadClass() /home/ubuntu/workspace/backup/vendor/laravel/framework/src/Illuminate/Routing/Route.php:280
+[12-Jul-2017 22:47:23 UTC] PHP  23. Composer\Autoload\includeFile() /home/ubuntu/workspace/backup/vendor/composer/ClassLoader.php:322

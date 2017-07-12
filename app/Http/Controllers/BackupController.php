@@ -24,18 +24,57 @@ class BackupController extends Controller
         $user = User::find(Auth::user()->user_id);
         
         if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            
-            if( file_exists($directory)) {
-                $request->session()->flash('copias', true);
-                
-                return view('backup.index', ['directory' => $directory, 'files' => scandir($directory)]);
-            } else {
-                echo '!exists';
-            }
+            return view('backup.index', ['files' => $this->_getCopies($user)]);
         } else {
             echo 'Error: usuario no encontrado';
         }
+    }
+    
+    private function _getCopies($users)
+    {
+        $files = array();
+        
+        if(is_a($users, "Illuminate\Database\Eloquent\Collection")){
+            foreach($users as $user)
+            {
+                array_push($files, ["user" => $user->name, 
+                                    "directory" => base_path() . '/' . self::UPLOAD_PATH . $user->business,
+                                    "files" => $this->_getFiles($user)]);
+            }
+        } else {
+            array_push($files, ["user" => $users->name, 
+                                "directory" => base_path() . '/' . self::UPLOAD_PATH . $users->business,
+                                "files" => $this->_getFiles($users)]);
+        }
+        
+        return $files;
+    }
+    
+    private function _getFiles($user)
+    {
+        $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
+
+        if (file_exists($directory)) {
+            $files = scandir($directory);
+        }
+        
+        return $files;
+    }
+    
+    /**
+     * Show copies from all directories
+     * 
+     * @return view
+     * */
+    public function showAllCopies()
+    {
+        $users = User::all();
+        
+        //if ($users != null) {
+            return view('backup.index', ['files' => $this->_getCopies($users)]);
+        /*} else {
+            echo 'Información: No hay usuarios por mostrar';
+        }*/
     }
     
     public function downloadFile(Request $request)

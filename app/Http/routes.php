@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UserController');
     Route::resource('users/{id}/destroy', 'UserController@destroy');
     
+    Route::get('backups/showfiles', 'BackupController@showAllCopies');
     Route::resource('backups', 'BackupController');
     Route::get('backups/downloadfile/{file_name}', 'BackupController@downloadFile');
     Route::get('backups/deletefile/{file_name}', 'BackupController@deleteFile');
