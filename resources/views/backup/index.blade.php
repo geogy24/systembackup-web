@@ -16,13 +16,11 @@
                         <th>Nombre</th>
                         <th>Tamaño</th>
                         <th>Fecha creación</th>
-                        @if (Auth::user()->user_type_id == 1)
-                            <th>
-                                <center>
-                                    Opciones
-                                </center>
-                            </th>
-                        @endif
+                        <th>
+                            <center>
+                                Opciones
+                            </center>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,18 +34,19 @@
                                     <td>{{ $files[$j]['files'][$i] }}</td>
                                     <td>{{ filesize($files[$j]['directory'] . '/' . $files[$j]['files'][$i]) . ' bytes' }}</td>
                                     <td>{{ date("F d Y H:i:s", filectime($files[$j]['directory'] . '/' . $files[$j]['files'][$i])) }}</td>
-                                    @if (Auth::user()->user_type_id == 1)
-                                        <td>
-                                            <center>
+                                    <td>
+                                        <center>
+                                            @if (Auth::user()->user_type_id == 1)
                                                 <a href="{{ url('backups/deletefile', ['file' => $files[$j]['files'][$i]]) }}">
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </a>
+                                            @else
                                                 <a href="{{ url('backups/downloadfile', ['file' => $files[$j]['files'][$i]]) }}">
                                                     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                                                 </a>
-                                            </center>
-                                        </td>
-                                    @endif
+                                            @endif
+                                        </center>
+                                    </td>
                                 </tr>
                              @endif
                         @endfor
