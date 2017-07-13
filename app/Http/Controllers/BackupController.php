@@ -35,14 +35,15 @@ class BackupController extends Controller
         $files = array();
         
         if(is_a($users, "Illuminate\Database\Eloquent\Collection")){
-            foreach($users as $user)
-            {
-                array_push($files, ["user" => $user->name, 
+            foreach ($users as $user) {
+                array_push($files, ["user" => $user->name,
+                                    "user_id" => $user->user_id,
                                     "directory" => base_path() . '/' . self::UPLOAD_PATH . $user->business,
                                     "files" => $this->_getFiles($user)]);
             }
         } else {
             array_push($files, ["user" => $users->name, 
+                                "user_id" => $users->user_id,
                                 "directory" => base_path() . '/' . self::UPLOAD_PATH . $users->business,
                                 "files" => $this->_getFiles($users)]);
         }
@@ -68,13 +69,13 @@ class BackupController extends Controller
      * */
     public function showAllCopies()
     {
-        $users = User::all();
+        $users = User::where('user_type_id','=', 2)->get();
         
-        //if ($users != null) {
+        if ($users != null) {
             return view('backup.index', ['files' => $this->_getCopies($users)]);
-        /*} else {
+        } else {
             echo 'Información: No hay usuarios por mostrar';
-        }*/
+        }
     }
     
     public function downloadFile(Request $request)
@@ -107,7 +108,7 @@ class BackupController extends Controller
     
     public function deleteFile(Request $request)
     {
-        $user = User::find(Auth::user()->user_id);
+        $user = User::find($request->user_id);
         
         if($user != null){
             $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
@@ -115,7 +116,11 @@ class BackupController extends Controller
             
             if(file_exists($fileToDeleted)) {
                 if (unlink($fileToDeleted)) {
-                    return redirect()->action('BackupController@index');
+                    if (Auth::user()->user_type_id == 1) {
+                        return redirect()->action('BackupController@showAllCopies');
+                    } else {
+                        return redirect()->action('BackupController@index');
+                    }
                 }
             }
         }

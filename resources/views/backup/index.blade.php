@@ -37,7 +37,7 @@
                                     <td>
                                         <center>
                                             @if (Auth::user()->user_type_id == 1)
-                                                <a href="{{ url('backups/deletefile', ['file' => $files[$j]['files'][$i]]) }}">
+                                                <a href="{{ url('backups/deletefile', ['file' => $files[$j]['files'][$i], 'user_id' => $files[$j]['user_id']]) }}">
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </a>
                                             @else
