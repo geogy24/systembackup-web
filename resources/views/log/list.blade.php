@@ -29,3 +29,7 @@
     </tbody>
     <tfoot></tfoot>
 </table>
+
+<div class="text-center">
+{{ $logs->links() }}
+</div>

@@ -8,14 +8,40 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
            $('select[name="select_user"]').change(function(){
+               var url = "{{ url('logs/') }}"; 
+               
+               if ($(this).val() != "0") {
+                   url += "/" + $(this).val() ;
+               } else {
+                   url += "";
+               }
+               
                $.ajax({
-                    url: "{{ url('logs/') }}/" + $(this).val(),
+                    url: url,
                 })
                 .done(function( data ) {
                     $('#div_log').html(data);
                 });
            });
         });
+        
+        
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function (e) {
+                getPosts($(this).attr('href'));//.split('page=')[1]);
+                e.preventDefault();
+            });
+        });
+        
+        function getPosts(page) {
+            $.ajax({
+                url : page,
+            }).done(function (data) {
+                $('#div_log').html(data);
+            }).fail(function () {
+                alert('Posts could not be loaded.');
+            });
+        }
     </script>
 
     <div class="panel panel-default">

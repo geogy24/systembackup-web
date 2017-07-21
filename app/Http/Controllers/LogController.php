@@ -19,10 +19,14 @@ class LogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $logs = Log::All();
+        $logs = Log::paginate(20);
         $users = User::where('user_type_id', 2)->get();
+        
+        if ($request->ajax()) {
+            return view('log.list', ['logs' => $logs]);
+        }
         
         return view('log.index', ['logs' => $logs, 'users' => $users]);
     }
@@ -35,7 +39,7 @@ class LogController extends Controller
     public function listClient($identification)
     {
         if ($identification != 0) {
-            $logs = Log::where('user_id', $identification)->get();
+            $logs = Log::where('user_id', $identification)->paginate(20);
         } else {
             $logs = Log::all();
         }
