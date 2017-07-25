@@ -19,6 +19,11 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
+Route::group(['prefix' => 'api'], function () {
+    Route::post('users/login', 'UserController@login');
+    Route::post('log/prueba', 'LogController@prueba');
+});
+
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UserController');
     Route::resource('users/{id}/destroy', 'UserController@destroy');

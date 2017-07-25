@@ -242,11 +242,11 @@
                     <hr class="primary">
                     <p>Listo para iniciar tus copias de seguridad automaticas, dejanos un mensaje y te contactaremos lo más pronto posible.</p>
                 </div>
-                <div class="col-lg-4 col-lg-offset-2 text-center">
+                <!--<div class="col-lg-4 col-lg-offset-2 text-center">
                     <i class="fa fa-phone fa-3x sr-contact"></i>
                     <p>.</p>
-                </div>
-                <div class="col-lg-4 text-center">
+                </div>-->
+                <div class="col-lg-8 col-lg-offset-2 text-center">
                     <i class="fa fa-envelope-o fa-3x sr-contact"></i>
                     <p><a href="mailto:craftsmancloud@gmail.com">craftsmancloud@gmail.com</a></p>
                 </div>

@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use DB;
+
+use Hash;
+
 class UserController extends Controller
 {
     
@@ -162,5 +166,29 @@ class UserController extends Controller
         $directory = base_path() . '/' . self::UPLOAD_PATH . $name;
         
         rmdir($directory);
+    }
+    
+    /**
+     * Login in the API way
+     */
+    public function login(Request $request)
+    {
+        $finded = false;
+        $JSONData = $request->json;
+        
+        $users = DB::table('users')->where('email', $JSONData['email'])->where('user_type_id', 2)->get();
+        
+        header('Content-Type: application/json');
+        
+        foreach ($users as $user) {
+            if (Hash::check($JSONData['password'], $user->password)) {
+                echo json_encode(array("login" => true, "user_id" => $user->user_id));
+                $finded = true;
+            }
+        }
+        
+        if (!$finded) {
+            echo json_encode(array('login' => false));
+        }
     }
 }
