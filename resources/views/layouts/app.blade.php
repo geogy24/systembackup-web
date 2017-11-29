@@ -8,7 +8,12 @@
     <meta name="author" content="">
 
     <title>System Backup</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+    <link rel="manifest" href="favicons/manifest.json">
+    <link rel="mask-icon" href="favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
     
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -73,7 +78,7 @@
             <div class="header-content-inner">
                 <h1 id="homeHeading">Guarda tus copias de seguridad con confianza</h1>
                 <hr>
-                <p>¡Service Backup te ayuda a guardar las copias de seguridad de tus archivos y te ayuda a mantenerlos seguros!</p>
+                <p>¡System Backup te ayuda a guardar las copias de seguridad de tus archivos y te ayuda a mantenerlos seguros!</p>
                 <a href="#about" class="btn btn-primary btn-xl page-scroll">Aprende más</a>
             </div>
         </div>
