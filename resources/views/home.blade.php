@@ -5,12 +5,11 @@
 @section('subtitle', 'Estado de la sesión')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Panel</div>
-    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-border-color panel-border-color-primary">
+                <div class="panel-heading panel-heading-divider">Ayuda<span class="panel-subtitle">¿Necesitas ayuda para manejar la aplicación?.</span></div>
+                <div class="panel-body">
                     <div class="panel-body">
                         ¡Te has logueado exitosamente!
                     </div>

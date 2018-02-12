@@ -28,6 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        session(['link' => 'usuarios']);
         $users = User::All();
         
         return view('user.index', ['users' => $users]);
@@ -122,11 +123,15 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . Auth::user()->user_id . ',user_id',
+            'email' => 'required|email|max:255|unique:users,email,' . (($id != null) ? $id : Auth::user()->user_id) . ',user_id',
             'password' => 'required|min:6|confirmed',
         ]);
         
-        $user = User::find(Auth::user()->user_id);
+        if ($id != null) {
+            $user = User::find($id);
+        } else {
+            $user = User::find(Auth::user()->user_id);
+        }
         
         if ($user != null) {
             $user->name = $request->name;
@@ -138,7 +143,7 @@ class UserController extends Controller
         if (Auth::user()->user_type_id == 2) {
             return redirect()->action('BackupController@index');
         } else {
-            return redirect()->action('HomeController@index');
+            return redirect()->action('UserController@index');
         }
     }
 

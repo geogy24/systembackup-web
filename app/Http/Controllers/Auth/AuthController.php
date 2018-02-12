@@ -79,5 +79,11 @@ class AuthController extends Controller
             'user_type_id' => 2
         ]);
     }
+
+    protected function logout()
+    {
+        session()->flush();
+        return redirect($this->redirectAfterLogout);
+    }
     
 }

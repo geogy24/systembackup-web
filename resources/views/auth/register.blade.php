@@ -2,15 +2,24 @@
 
 @section('title', 'Usuario')
 
-@section('subtitle', 'Registre los datos del usuario')
+@section('breadcumbs')
+    <div class="page-head">
+        <h2 class="page-head-title">Usuario</h2>
+        <ol class="breadcrumb page-head-nav">
+            <li><a href="/home">Inicio</a></li>
+            <li><a href="/users">Usuarios</a></li>
+            <li class="active">Create-Edit</li>
+        </ol>
+    </div>
+@endsection
 
 @section('content')
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Registro</div>
+        <div class="col-md-12">
+            <div class="panel panel-default panel-border-color panel-border-color-primary">
+                <div class="panel-heading panel-heading-divider">Usuario<span class="panel-subtitle">Registre o edite un usuario</span></div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ (isset($user)) ? url('users/' . $user->user_id) : url('users') }}">
+                    <form style="border-radius: 0px;" class="form-horizontal group-border-dashed" role="form" method="POST" action="{{ (isset($user)) ? url('users/' . $user->user_id) : url('users') }}">
                         {{ (isset($user)) ? method_field('PUT') : '' }}
                         {{ csrf_field() }}
 
