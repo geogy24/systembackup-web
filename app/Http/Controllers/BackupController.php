@@ -13,6 +13,8 @@ use App\Http\Requests;
 class BackupController extends Controller
 {
     const UPLOAD_PATH = 'upload/';
+
+    public $months = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     
     /**
      * Display a listing of the resource.
@@ -25,7 +27,7 @@ class BackupController extends Controller
         $user = User::find(Auth::user()->user_id);
         
         if($user != null){
-            return view('backup.index', ['files' => $this->_getCopies($user)]);
+            return view('backup.index', ['files' => $this->_getCopies($user), 'months' => $this->months]);
         } else {
             echo 'Error: usuario no encontrado';
         }
@@ -74,7 +76,7 @@ class BackupController extends Controller
         $users = User::where('user_type_id','=', 2)->get();
         
         if ($users != null) {
-            return view('backup.index', ['files' => $this->_getCopies($users)]);
+            return view('backup.index', ['files' => $this->_getCopies($users), 'months' => $this->months]);
         } else {
             echo 'Información: No hay usuarios por mostrar';
         }

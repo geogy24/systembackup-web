@@ -42,8 +42,8 @@
                                                 <td>{{ $files[$j]['user'] }}</td>
                                             @endif
                                             <td>{{ $files[$j]['files'][$i] }}</td>
-                                            <td>{{ filesize($files[$j]['directory'] . '/' . $files[$j]['files'][$i]) . ' bytes' }}</td>
-                                            <td>{{ date("F d Y H:i:s", filectime($files[$j]['directory'] . '/' . $files[$j]['files'][$i])) }}</td>
+                                            <td>{{ round((((filesize($files[$j]['directory'] . '/' . $files[$j]['files'][$i]) / 1000) / 1000) / 1000), 3, PHP_ROUND_HALF_UP) . ' Gigabit' }}</td>
+                                            <td>{{ $months[date("n", filectime($files[$j]['directory'] . '/' . $files[$j]['files'][$i])) - 1] . ' ' . date("d Y H:i:s", filectime($files[$j]['directory'] . '/' . $files[$j]['files'][$i])) }}</td>
                                             <td class="actions">
                                                 @if (Auth::user()->user_type_id == 1)
                                                     <!--<a href="{{ url('backups/deletefile', ['file' => $files[$j]['files'][$i], 'user_id' => $files[$j]['user_id']]) }}">-->
