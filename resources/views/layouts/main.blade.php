@@ -54,6 +54,7 @@
       </nav>
       <div class="be-left-sidebar">
         <div class="left-sidebar-wrapper">
+	  <a href="#" class="left-sidebar-toggle">Escritorio</a>
           <div class="left-sidebar-spacer">
             <div class="left-sidebar-scroll">
               <div class="left-sidebar-content">
