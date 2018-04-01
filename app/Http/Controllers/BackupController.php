@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 
+use App\Facades\DropboxClass;
+
 use App\User;
 
 use Illuminate\Http\Request;
@@ -72,14 +74,19 @@ class BackupController extends Controller
      * */
     public function showAllCopies()
     {
-        session(['link' => 'copias']);
+        //var_dump(DropboxClass::listDirectory('almapaisa'));
+        //var_dump(DropboxClass::createFolder('prueba7'));
+        //var_dump(DropboxClass::delete('prueba1'));
+        DropboxClass::download('prueba/2018_03_16.rar');
+
+        /*session(['link' => 'copias']);
         $users = User::where('user_type_id','=', 2)->get();
         
         if ($users != null) {
             return view('backup.index', ['files' => $this->_getCopies($users), 'months' => $this->months]);
         } else {
             echo 'Información: No hay usuarios por mostrar';
-        }
+        }*/
     }
     
     public function downloadFile(Request $request)
