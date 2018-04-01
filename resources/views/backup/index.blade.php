@@ -39,18 +39,22 @@
                                     @if ($files[$j]['files'][$i] != '.' && $files[$j]['files'][$i] != '..')
                                         <tr>
                                             @if (Auth::user()->user_type_id == 1)
-                                                <td>{{ $files[$j]['user'] }}</td>
+                                                <td>{{ $files[$j]['user']->name }}</td>
                                             @endif
-                                            <td>{{ $files[$j]['files'][$i] }}</td>
-                                            <td>{{ round((((filesize($files[$j]['directory'] . '/' . $files[$j]['files'][$i]) / 1000) / 1000) / 1000), 3, PHP_ROUND_HALF_UP) . ' Gigabit' }}</td>
-                                            <td>{{ $months[date("n", filectime($files[$j]['directory'] . '/' . $files[$j]['files'][$i])) - 1] . ' ' . date("d Y H:i:s", filectime($files[$j]['directory'] . '/' . $files[$j]['files'][$i])) }}</td>
+                                            <td>{{ $files[$j]['files'][$i]->name }}</td>
+                                            <td>{{ round(((($files[$j]['files'][$i]->size / 1000) / 1000) / 1000), 3, PHP_ROUND_HALF_UP) . ' Gigabit' }}</td>
+                                            <td>{{ $files[$j]['files'][$i]->client_modified }}</td>
                                             <td class="actions">
                                                 @if (Auth::user()->user_type_id == 1)
-                                                    <!--<a href="{{ url('backups/deletefile', ['file' => $files[$j]['files'][$i], 'user_id' => $files[$j]['user_id']]) }}">-->
-                                                        <span data-toggle="modal" data-target="#md-footer-danger" class="icon mdi mdi-delete" aria-hidden="true" onclick="setDeleteUrl('{{ url('backups/deletefile', ['file' => $files[$j]['files'][$i], 'user_id' => $files[$j]['user_id']]) }}')"></span>
-                                                    <!--</a>-->
+                                                    <span 
+                                                        data-toggle="modal" 
+                                                        data-target="#md-footer-danger"
+                                                        class="icon mdi mdi-delete"
+                                                        aria-hidden="true"
+                                                        onclick="setDeleteUrl('{{ url('backups/deletefile', ['path' => $files[$j]['user']->business . '/' . $files[$j]['files'][$i]->name]) }}')">
+                                                    </span>
                                                 @else
-                                                    <a href="{{ url('backups/downloadfile', ['file' => $files[$j]['files'][$i]]) }}">
+                                                    <a href="{{ url('backups/downloadfile', ['path' => $files[$j]['user']->business . '/' . $files[$j]['files'][$i]->name]) }}">
                                                         <span class="icon mdi mdi-download" aria-hidden="true"></span>
                                                     </a>
                                                 @endif

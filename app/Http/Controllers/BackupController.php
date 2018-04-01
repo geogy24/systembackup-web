@@ -14,9 +14,7 @@ use App\Http\Requests;
 
 class BackupController extends Controller
 {
-    const UPLOAD_PATH = 'upload/';
-
-    public $months = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    const CLIENT_USER = 2;
     
     /**
      * Display a listing of the resource.
@@ -26,49 +24,17 @@ class BackupController extends Controller
     public function index(Request $request)
     {
         session(['link' => 'copias']);
-        $user = User::find(Auth::user()->user_id);
+        $users = collect([User::find(Auth::user()->user_id)]);
         
-        if($user != null){
-            return view('backup.index', ['files' => $this->_getCopies($user), 'months' => $this->months]);
+        if($users != null){
+            return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
             echo 'Error: usuario no encontrado';
         }
     }
-    
-    private function _getCopies($users)
-    {
-        $files = array();
-        
-        if(is_a($users, "Illuminate\Database\Eloquent\Collection")){
-            foreach ($users as $user) {
-                array_push($files, ["user" => $user->name,
-                                    "user_id" => $user->user_id,
-                                    "directory" => base_path() . '/' . self::UPLOAD_PATH . $user->business,
-                                    "files" => $this->_getFiles($user)]);
-            }
-        } else {
-            array_push($files, ["user" => $users->name, 
-                                "user_id" => $users->user_id,
-                                "directory" => base_path() . '/' . self::UPLOAD_PATH . $users->business,
-                                "files" => $this->_getFiles($users)]);
-        }
-        
-        return $files;
-    }
-    
-    private function _getFiles($user)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
 
-        if (file_exists($directory)) {
-            $files = scandir($directory);
-        }
-        
-        return $files;
-    }
-    
     /**
-     * Show copies from all directories
+     * Show copies from all users
      * 
      * @return view
      * */
@@ -77,21 +43,38 @@ class BackupController extends Controller
         //var_dump(DropboxClass::listDirectory('almapaisa'));
         //var_dump(DropboxClass::createFolder('prueba7'));
         //var_dump(DropboxClass::delete('prueba1'));
-        DropboxClass::download('prueba/2018_03_16.rar');
+        //DropboxClass::download('prueba/2018_03_16.rar');
 
-        /*session(['link' => 'copias']);
-        $users = User::where('user_type_id','=', 2)->get();
+        session(['link' => 'copias']);
+        $users = User::where('user_type_id','=', self::CLIENT_USER)->get();
         
         if ($users != null) {
-            return view('backup.index', ['files' => $this->_getCopies($users), 'months' => $this->months]);
+            return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
             echo 'Información: No hay usuarios por mostrar';
-        }*/
+        }
+    }
+    
+    /**
+     * Get list of copies from the user(s)
+     * 
+     * @param Collection $users
+     * @return array $files
+     */
+    private function _getCopies($users) {
+        $files = array();
+
+        foreach ($users as $user) {
+            array_push($files, ["user" => $user,
+                                "files" => DropboxClass::listDirectory($user->business)]);
+        }
+        
+        return $files;
     }
     
     public function downloadFile(Request $request)
     {
-        $user = User::find(Auth::user()->user_id);
+        /*$user = User::find(Auth::user()->user_id);
         
         if($user != null){
             $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
@@ -114,10 +97,10 @@ class BackupController extends Controller
             }
         } else {
             echo 'Error: usuario no encontrado';
-        }
+        }*/
     }
     
-    public function deleteFile(Request $request)
+    /*public function deleteFile(Request $request)
     {
         $user = User::find($request->user_id);
         
@@ -135,6 +118,10 @@ class BackupController extends Controller
                 }
             }
         }
+    }*/
+
+    public function deleteFile(Request $request) {
+
     }
 
     /**
