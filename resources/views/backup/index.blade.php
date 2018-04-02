@@ -51,7 +51,7 @@
                                                         data-target="#md-footer-danger"
                                                         class="icon mdi mdi-delete"
                                                         aria-hidden="true"
-                                                        onclick="setDeleteUrl('{{ url('backups/deletefile', ['path' => $files[$j]['user']->business . '/' . $files[$j]['files'][$i]->name]) }}')">
+                                                        onclick="setDeleteUrl('{{ url('backups/deletefile', ['business' => $files[$j]['user']->business, 'name' => $files[$j]['files'][$i]->name]) }}')">
                                                     </span>
                                                 @else
                                                     <a href="{{ url('backups/downloadfile', ['path' => $files[$j]['user']->business . '/' . $files[$j]['files'][$i]->name]) }}">

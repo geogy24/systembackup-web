@@ -19,6 +19,7 @@ class BackupController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request params for HTTP
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -38,8 +39,7 @@ class BackupController extends Controller
      * 
      * @return view
      * */
-    public function showAllCopies()
-    {
+    public function showAllCopies() {
         //var_dump(DropboxClass::listDirectory('almapaisa'));
         //var_dump(DropboxClass::createFolder('prueba7'));
         //var_dump(DropboxClass::delete('prueba1'));
@@ -72,32 +72,14 @@ class BackupController extends Controller
         return $files;
     }
     
-    public function downloadFile(Request $request)
-    {
-        /*$user = User::find(Auth::user()->user_id);
-        
-        if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            
-            if( file_exists($directory)) {
-                // http headers for zip downloads
-                header("Pragma: public");
-                header("Expires: 0");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                header("Cache-Control: public");
-                header("Content-Description: File Transfer");
-                header("Content-type: application/octet-stream");
-                header("Content-Disposition: attachment; filename=\"" . $request->file_name . "\"");
-                header("Content-Transfer-Encoding: binary");
-                header("Content-Length: " . filesize($directory . '/' . $request->file_name));
-                ob_end_flush();
-                @readfile($directory .'/'. $request->file_name);
-            } else {
-                echo '!exists';
-            }
-        } else {
-            echo 'Error: usuario no encontrado';
-        }*/
+    /**
+     * Download file from dropbox storage
+     * 
+     * @param Request $request params for HTTP
+     * @return void
+     */
+    public function downloadFile(Request $request) {
+        DropboxClass::download($request->business . '/' . $request->name);
     }
     
     /*public function deleteFile(Request $request)
