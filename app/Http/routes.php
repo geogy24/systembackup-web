@@ -30,7 +30,6 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('backups/showfiles', 'BackupController@showAllCopies');
     Route::get('backups/downloadfile/{business}/{name}', 'BackupController@downloadFile');
-    //Route::get('backups/downloadfile/{file_name}', 'BackupController@downloadFile');
     Route::get('backups/deletefile/{business}/{name}', 'BackupController@deleteFile');
     Route::resource('backups', 'BackupController');
     

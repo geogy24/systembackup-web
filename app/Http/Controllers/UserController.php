@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Facades\DropboxClass;
+
 use DB;
 
 use Hash;
@@ -56,14 +58,14 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'business' => 'required|max:255',
+            'business' => 'required|max:255|unique:users',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
             'user_type' => 'required'
         ]);
         
         if($request->user_type == 2){
-            $this->makeNewDirectory($request->business);
+            DropboxClass::createFolder($request->business);
         }
         
         $user = new User();
@@ -75,13 +77,6 @@ class UserController extends Controller
         $user->save();
         
         return redirect()->action('UserController@index');
-    }
-    
-    private function makeNewDirectory($name)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $name;
-        
-        mkdir($directory);
     }
 
     /**
@@ -107,8 +102,6 @@ class UserController extends Controller
         
         if($user != null){
             return view('auth.register', ['user' => $user]);
-        } else {
-            
         }
     }
 
@@ -158,19 +151,12 @@ class UserController extends Controller
         $user = User::find($id);
         
         if ($user->user_type_id == 2){
-            $this->deleteDirectory($user->business);
+            DropboxClass::delete($user->business);
         }
         
         $user->delete();
         
         return redirect()->action('UserController@index');
-    }
-    
-    private function deleteDirectory($name)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $name;
-        
-        rmdir($directory);
     }
     
     /**

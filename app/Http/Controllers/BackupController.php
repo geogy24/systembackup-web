@@ -40,11 +40,6 @@ class BackupController extends Controller
      * @return view
      * */
     public function showAllCopies() {
-        //var_dump(DropboxClass::listDirectory('almapaisa'));
-        //var_dump(DropboxClass::createFolder('prueba7'));
-        //var_dump(DropboxClass::delete('prueba1'));
-        //DropboxClass::download('prueba/2018_03_16.rar');
-
         session(['link' => 'copias']);
         $users = User::where('user_type_id','=', self::CLIENT_USER)->get();
         
@@ -81,29 +76,21 @@ class BackupController extends Controller
     public function downloadFile(Request $request) {
         DropboxClass::download($request->business . '/' . $request->name);
     }
-    
-    /*public function deleteFile(Request $request)
-    {
-        $user = User::find($request->user_id);
-        
-        if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            $fileToDeleted = $directory . '/' . $request->file_name;
-            
-            if(file_exists($fileToDeleted)) {
-                if (unlink($fileToDeleted)) {
-                    if (Auth::user()->user_type_id == 1) {
-                        return redirect()->action('BackupController@showAllCopies');
-                    } else {
-                        return redirect()->action('BackupController@index');
-                    }
-                }
+
+    /**
+     * Delete file
+     * 
+     * @param Request $request params for HTTP
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteFile(Request $request) {
+        if (DropboxClass::delete($request->business . '/' . $request->name)) {
+            if (Auth::user()->user_type_id == 1) {
+                return redirect()->action('BackupController@showAllCopies');
+            } else {
+                return redirect()->action('BackupController@index');
             }
         }
-    }*/
-
-    public function deleteFile(Request $request) {
-
     }
 
     /**

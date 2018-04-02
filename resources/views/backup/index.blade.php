@@ -54,7 +54,7 @@
                                                         onclick="setDeleteUrl('{{ url('backups/deletefile', ['business' => $files[$j]['user']->business, 'name' => $files[$j]['files'][$i]->name]) }}')">
                                                     </span>
                                                 @else
-                                                    <a href="{{ url('backups/downloadfile', ['path' => $files[$j]['user']->business . '/' . $files[$j]['files'][$i]->name]) }}">
+                                                    <a href="{{ url('backups/downloadfile', ['business' => $files[$j]['user']->business, 'name' => $files[$j]['files'][$i]->name]) }}">
                                                         <span class="icon mdi mdi-download" aria-hidden="true"></span>
                                                     </a>
                                                 @endif
