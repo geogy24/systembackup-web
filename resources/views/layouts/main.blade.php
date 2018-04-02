@@ -74,9 +74,9 @@
                         <li><a href="{{ url('backups/showfiles') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
                       @endif
                       @if(Session::get('link') == 'registros')
-                        <li class="active"><a href="{{ url('logs') }}">Registros</a></li>
+                        <!--<li class="active"><a href="{{ url('logs') }}">Registros</a></li>-->
                       @else
-                        <li><a href="{{ url('logs') }}">Registros</a></li>
+                        <!--<li><a href="{{ url('logs') }}">Registros</a></li>-->
                       @endif
                       @if(Session::get('link') == 'usuarios')
                         <li class="active"><a href="{{ url('users') }}">Usuarios</a></li>
