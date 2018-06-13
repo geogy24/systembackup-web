@@ -156,6 +156,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * Local service providers...
+         */
+        App\Providers\DropboxApiClassServiceProvider::class
     ],
 
     /*
@@ -202,6 +206,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        /**
+         * Local aliases
+         */
+        'DropboxApiClass' => Illuminate\Support\Facades\DropboxApiClass::class,
     ],
 
 ];

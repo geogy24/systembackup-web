@@ -10,8 +10,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use Alorel\Dropbox\Operation\Files\ListFolder\ListFolder;
+use Alorel\Dropbox\Options\Builder\ListFolderOptions;
+
 class BackupController extends Controller
 {
+    const DROPBOX_API_TOKEN = 'I7BNS6E3BqAAAAAAAAAACYKPSNRni75LOHPJthUcjs14yK7cXFUI6Qo7HsDKjxDk';
+
+    const BASE_PATH_DROPBOX = '/empresas';
+
     const UPLOAD_PATH = 'upload/';
 
     public $months = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -72,14 +79,63 @@ class BackupController extends Controller
      * */
     public function showAllCopies()
     {
-        session(['link' => 'copias']);
+        echo DropboxApiClass::getFilesFromFolder('hola');
+        /*session(['link' => 'copias']);
         $users = User::where('user_type_id','=', 2)->get();
+
+        var_dump($this->_getListCopies($users));
         
         if ($users != null) {
-            return view('backup.index', ['files' => $this->_getCopies($users), 'months' => $this->months]);
+            return view('backup.index', ['files' => $this->_getListCopies($users), 'months' => $this->months]);
         } else {
             echo 'Información: No hay usuarios por mostrar';
+        }*/
+    }
+
+    private function _getListCopies($users)
+    {
+        $files = array();
+        
+        if(is_a($users, "Illuminate\Database\Eloquent\Collection")){
+            foreach ($users as $user) {
+                array_push($files, ["user" => $user->name,
+                                    "user_id" => $user->user_id,
+                                    "directory" => base_path() . '/' . self::UPLOAD_PATH . $user->business,
+                                    "files" => $this->_getListFiles($user->business)]);
+            }
         }
+
+        return $files;
+    }
+
+    private function _getListFiles($enterpriseName)
+    {
+        $listFolder = new ListFolder(false, self::DROPBOX_API_TOKEN);
+        $response = $listFolder->raw(self::BASE_PATH_DROPBOX . '/' . $enterpriseName);
+        $body = $response->getBody();
+        $data = '';
+
+        while(!$body->eof()){
+            $data .= $body->read(1024);
+        }
+        
+        $folders = array();
+
+        if ($folderRecursive = json_decode($data, true)) {
+            $entries = $folderRecursive['entries'];
+
+            foreach($entries as $entrie) {
+                if($entrie['.tag'] == 'file') {
+                    array_push($folders, 
+                                array(  'name' => $entrie['name'],
+                                        'size' => $entrie['size'],
+                                        'id'   => $entrie['id'],
+                                        'date' => $entrie['server_modified']));
+                }
+            }
+        }
+
+        return $folders;
     }
     
     public function downloadFile(Request $request)
