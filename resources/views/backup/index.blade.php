@@ -39,15 +39,22 @@
                                     @if ($files[$j]['files'][$i] != '.' && $files[$j]['files'][$i] != '..')
                                         <tr>
                                             @if (Auth::user()->user_type_id == 1)
-                                                <td>{{ $files[$j]['user'] }}</td>
+                                                <td>{{ $files[$j]['user']->name }}</td>
                                             @endif
+<<<<<<< HEAD
                                             <td>{{ $files[$j]['files'][$i]['name'] }}</td>
                                             <td>{{ round(((($files[$j]['files'][$i]['size'] / 1000) / 1000) / 1000), 3, PHP_ROUND_HALF_UP) . ' Gigabit' }}</td>
                                             <td>{{ substr($files[$j]['files'][$i]['date'], 0, strpos($files[$j]['files'][$i]['date'], 'T')) }}</td>
+=======
+                                            <td>{{ $files[$j]['files'][$i]->name }}</td>
+                                            <td>{{ round(((($files[$j]['files'][$i]->size / 1000) / 1000) / 1000), 3, PHP_ROUND_HALF_UP) . ' Gigabit' }}</td>
+                                            <td>{{ $files[$j]['files'][$i]->client_modified }}</td>
+>>>>>>> f85957c9bb0c6b6bc0fdd84fe1997ca4a6ddff5b
                                             <td class="actions">
                                                 @if (Auth::user()->user_type_id == 1)
                                                     <span 
                                                         data-toggle="modal" 
+<<<<<<< HEAD
                                                         data-target="#md-footer-danger" 
                                                         class="icon mdi mdi-delete" 
                                                         aria-hidden="true" 
@@ -59,6 +66,15 @@
                                                     </span>
                                                 @else
                                                     <a href="{{ url('backups/downloadfile', ['file' => $files[$j]['files'][$i]['name']]) }}">
+=======
+                                                        data-target="#md-footer-danger"
+                                                        class="icon mdi mdi-delete"
+                                                        aria-hidden="true"
+                                                        onclick="setDeleteUrl('{{ url('backups/deletefile', ['business' => $files[$j]['user']->business, 'name' => $files[$j]['files'][$i]->name]) }}')">
+                                                    </span>
+                                                @else
+                                                    <a href="{{ url('backups/downloadfile', ['business' => $files[$j]['user']->business, 'name' => $files[$j]['files'][$i]->name]) }}">
+>>>>>>> f85957c9bb0c6b6bc0fdd84fe1997ca4a6ddff5b
                                                         <span class="icon mdi mdi-download" aria-hidden="true"></span>
                                                     </a>
                                                 @endif

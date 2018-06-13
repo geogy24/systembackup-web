@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 
+use App\Facades\DropboxClass;
+
 use App\User;
 
 use Illuminate\Http\Request;
@@ -15,81 +17,40 @@ use Alorel\Dropbox\Options\Builder\ListFolderOptions;
 
 class BackupController extends Controller
 {
-    const DROPBOX_API_TOKEN = 'I7BNS6E3BqAAAAAAAAAACYKPSNRni75LOHPJthUcjs14yK7cXFUI6Qo7HsDKjxDk';
-
-    const BASE_PATH_DROPBOX = '/empresas';
-
-    const UPLOAD_PATH = 'upload/';
-
-    public $months = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    const CLIENT_USER = 2;
     
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request params for HTTP
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         session(['link' => 'copias']);
-        $user = User::find(Auth::user()->user_id);
+        $users = collect([User::find(Auth::user()->user_id)]);
         
-        if($user != null){
-            return view('backup.index', ['files' => $this->_getCopies($user), 'months' => $this->months]);
+        if($users != null){
+            return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
             echo 'Error: usuario no encontrado';
         }
     }
-    
-    private function _getCopies($users)
-    {
-        $files = array();
-        
-        if(is_a($users, "Illuminate\Database\Eloquent\Collection")){
-            foreach ($users as $user) {
-                array_push($files, ["user" => $user->name,
-                                    "user_id" => $user->user_id,
-                                    "directory" => base_path() . '/' . self::UPLOAD_PATH . $user->business,
-                                    "files" => $this->_getFiles($user)]);
-            }
-        } else {
-            array_push($files, ["user" => $users->name, 
-                                "user_id" => $users->user_id,
-                                "directory" => base_path() . '/' . self::UPLOAD_PATH . $users->business,
-                                "files" => $this->_getFiles($users)]);
-        }
-        
-        return $files;
-    }
-    
-    private function _getFiles($user)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
 
-        if (file_exists($directory)) {
-            $files = scandir($directory);
-        }
-        
-        return $files;
-    }
-    
     /**
-     * Show copies from all directories
+     * Show copies from all users
      * 
      * @return view
      * */
-    public function showAllCopies()
-    {
-        echo DropboxApiClass::getFilesFromFolder('hola');
-        /*session(['link' => 'copias']);
-        $users = User::where('user_type_id','=', 2)->get();
-
-        var_dump($this->_getListCopies($users));
+    public function showAllCopies() {
+        session(['link' => 'copias']);
+        $users = User::where('user_type_id','=', self::CLIENT_USER)->get();
         
         if ($users != null) {
-            return view('backup.index', ['files' => $this->_getListCopies($users), 'months' => $this->months]);
+            return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
             echo 'Información: No hay usuarios por mostrar';
-        }*/
+        }
     }
 
     private function _getListCopies($users)
@@ -138,50 +99,45 @@ class BackupController extends Controller
         return $folders;
     }
     
-    public function downloadFile(Request $request)
-    {
-        $user = User::find(Auth::user()->user_id);
-        
-        if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            
-            if( file_exists($directory)) {
-                // http headers for zip downloads
-                header("Pragma: public");
-                header("Expires: 0");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                header("Cache-Control: public");
-                header("Content-Description: File Transfer");
-                header("Content-type: application/octet-stream");
-                header("Content-Disposition: attachment; filename=\"" . $request->file_name . "\"");
-                header("Content-Transfer-Encoding: binary");
-                header("Content-Length: " . filesize($directory . '/' . $request->file_name));
-                ob_end_flush();
-                @readfile($directory .'/'. $request->file_name);
-            } else {
-                echo '!exists';
-            }
-        } else {
-            echo 'Error: usuario no encontrado';
+    /**
+     * Get list of copies from the user(s)
+     * 
+     * @param Collection $users
+     * @return array $files
+     */
+    private function _getCopies($users) {
+        $files = array();
+
+        foreach ($users as $user) {
+            array_push($files, ["user" => $user,
+                                "files" => DropboxClass::listDirectory($user->business)]);
         }
+        
+        return $files;
     }
     
-    public function deleteFile(Request $request)
-    {
-        $user = User::find($request->user_id);
-        
-        if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            $fileToDeleted = $directory . '/' . $request->file_name;
-            
-            if(file_exists($fileToDeleted)) {
-                if (unlink($fileToDeleted)) {
-                    if (Auth::user()->user_type_id == 1) {
-                        return redirect()->action('BackupController@showAllCopies');
-                    } else {
-                        return redirect()->action('BackupController@index');
-                    }
-                }
+    /**
+     * Download file from dropbox storage
+     * 
+     * @param Request $request params for HTTP
+     * @return void
+     */
+    public function downloadFile(Request $request) {
+        DropboxClass::download($request->business . '/' . $request->name);
+    }
+
+    /**
+     * Delete file
+     * 
+     * @param Request $request params for HTTP
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteFile(Request $request) {
+        if (DropboxClass::delete($request->business . '/' . $request->name)) {
+            if (Auth::user()->user_type_id == 1) {
+                return redirect()->action('BackupController@showAllCopies');
+            } else {
+                return redirect()->action('BackupController@index');
             }
         }
     }

@@ -157,9 +157,17 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /**
+<<<<<<< HEAD
          * Local service providers...
          */
         App\Providers\DropboxApiClassServiceProvider::class
+=======
+         * Custom Service Provider ...
+         */
+        App\Providers\DropboxClassServiceProvider::class
+         
+
+>>>>>>> f85957c9bb0c6b6bc0fdd84fe1997ca4a6ddff5b
     ],
 
     /*
@@ -205,11 +213,15 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+<<<<<<< HEAD
 
         /**
          * Local aliases
          */
         'DropboxApiClass' => Illuminate\Support\Facades\DropboxApiClass::class,
+=======
+        'DropboxClass' => App\Facades\DropboxClass::class       // Custom facade
+>>>>>>> f85957c9bb0c6b6bc0fdd84fe1997ca4a6ddff5b
     ],
 
 ];
