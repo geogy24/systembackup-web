@@ -30,7 +30,7 @@
           <div class="navbar-header">
               <!--<a href="index.html" class="navbar-brand"></a>-->
               <a href="{{ url('/home') }}" style="display: inline-flex">
-                <img src="/img/logo.png" style="width:50px; margin: 10px;"/>
+                <img src="/img/logo.png" style="width:50px; height:45px; margin: 10px;"/>
               </a>
           </div>
           <div class="be-right-navbar">
