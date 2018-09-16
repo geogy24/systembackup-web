@@ -7,6 +7,7 @@ use Alorel\Dropbox\Operation\Files\CreateFolder;
 use Alorel\Dropbox\Operation\Files\ListFolder\ListFolder;
 use Alorel\Dropbox\Operation\Files\Delete;
 use Alorel\Dropbox\Operation\Files\Download;
+use Alorel\Dropbox\Operation\Files\GetTemporaryLink;
 use Alorel\Dropbox\Operation\Files\GetMetadata;
 
 use GuzzleHttp\Exception\ClientException;
@@ -69,11 +70,13 @@ class DropboxClass {
      * @return void
      */
     public function download($path) {
+	$link = '';
+
         try {
             $fileMetaData = self::getMetaData($path);
 
             if(!is_null($fileMetaData)) {
-                $download = new Download(false, self::DROPBOX_TOKEN);
+/*                $download = new Download(false, self::DROPBOX_TOKEN);
                 $response = $download->raw(self::BASE_FOLDER . $path);
 
                 header("Pragma: public");
@@ -85,11 +88,18 @@ class DropboxClass {
                 header("Content-Disposition: attachment; filename=\"" . $fileMetaData->name . "\"");
                 header("Content-Transfer-Encoding: binary");
                 header("Content-Length: " . $fileMetaData->size);
-                echo $response->getBody();
+                echo $response->getBody();*/
+
+		$temporaryLink = new GetTemporaryLink(false, self::DROPBOX_TOKEN);
+		$response = $temporaryLink->raw(self::BASE_FOLDER . $path);
+		$jsonResponse = $response->getBody();
+		$link = json_decode($jsonResponse)->link;
             }
         } catch (ClientException $e) { // Error on request 409 Conflicted
 
         }
+
+	return $link;
     }
 
     /**

@@ -123,7 +123,7 @@ class BackupController extends Controller
      * @return void
      */
     public function downloadFile(Request $request) {
-        DropboxClass::download($request->business . '/' . $request->name);
+        return redirect(DropboxClass::download($request->business . '/' . $request->name));
     }
 
     /**
