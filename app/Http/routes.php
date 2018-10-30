@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('logs/{id}', 'LogController@listClient');
     Route::get('logs', 'LogController@index');
+
+    Route::get('help', 'HelpController@index');
 });
 
 Route::get('/api/log/create', 'LogController@store');

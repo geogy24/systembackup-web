@@ -83,11 +83,31 @@
                       @else
                         <li><a href="{{ url('users') }}">Usuarios</a></li>
                       @endif
+                      @if(Session::get('link') == 'ayuda')
+                          <li class="active"><a href="{{ url('help') }}">Ayuda</a></li>
+                      @else
+                        <li><a href="{{ url('help') }}">Ayuda</a></li>
+                      @endif
+                      @if(Session::get('link') == 'copias')
+                          <li class="active"><a href="{{ url('backups') }}">Copias</a></li>
+                        @else
+                          <li><a href="{{ url('backups') }}">Copias</a></li>
+                        @endif
+                        @if(Session::get('link') == 'ayuda')
+                            <li class="active"><a href="{{ url('help') }}">Ayuda</a></li>
+                        @else
+                          <li><a href="{{ url('help') }}">Ayuda</a></li>
+                        @endif
                     @elseif (Auth::user()->user_type_id == 2)
                         @if(Session::get('link') == 'copias')
                           <li class="active"><a href="{{ url('backups') }}">Copias</a></li>
                         @else
                           <li><a href="{{ url('backups') }}">Copias</a></li>
+                        @endif
+                        @if(Session::get('link') == 'ayuda')
+                            <li class="active"><a href="{{ url('help') }}">Ayuda</a></li>
+                        @else
+                          <li><a href="{{ url('help') }}">Ayuda</a></li>
                         @endif
                     @endif
                     </ul>
