@@ -14,8 +14,6 @@ use GuzzleHttp\Exception\ClientException;
 
 class DropboxClass {
 
-    const DROPBOX_TOKEN = 'I7BNS6E3BqAAAAAAAAAACYKPSNRni75LOHPJthUcjs14yK7cXFUI6Qo7HsDKjxDk';
-
     const BASE_FOLDER = '/empresas/';
 
     /**
@@ -28,7 +26,7 @@ class DropboxClass {
         $created = null;
 
         try {
-            $createFolder = new CreateFolder(false, self::DROPBOX_TOKEN);
+            $createFolder = new CreateFolder(false, env('DROPBOX_TOKEN', 'fake-token'));
             $response = $createFolder->raw(self::BASE_FOLDER . $name);
             $jsonResponse = json_decode($response->getBody());
 
@@ -52,7 +50,7 @@ class DropboxClass {
         $entries = null;
 
         try {
-            $listFolder = new ListFolder(false, self::DROPBOX_TOKEN);
+            $listFolder = new ListFolder(false, env('DROPBOX_TOKEN', 'fake-token'));
             $response = $listFolder->raw(self::BASE_FOLDER . $folder);
             $jsonResponse = json_decode($response->getBody());
             $entries = $jsonResponse->entries;
@@ -67,39 +65,25 @@ class DropboxClass {
      * Download file of the folder
      * 
      * @param string $path
-     * @return void
+     * @return string $link
      */
     public function download($path) {
-	$link = '';
+	    $link = '';
 
         try {
             $fileMetaData = self::getMetaData($path);
 
             if(!is_null($fileMetaData)) {
-/*                $download = new Download(false, self::DROPBOX_TOKEN);
-                $response = $download->raw(self::BASE_FOLDER . $path);
-
-                header("Pragma: public");
-                header("Expires: 0");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                header("Cache-Control: public");
-                header("Content-Description: File Transfer");
-                header("Content-type: application/octet-stream");
-                header("Content-Disposition: attachment; filename=\"" . $fileMetaData->name . "\"");
-                header("Content-Transfer-Encoding: binary");
-                header("Content-Length: " . $fileMetaData->size);
-                echo $response->getBody();*/
-
-		$temporaryLink = new GetTemporaryLink(false, self::DROPBOX_TOKEN);
-		$response = $temporaryLink->raw(self::BASE_FOLDER . $path);
-		$jsonResponse = $response->getBody();
-		$link = json_decode($jsonResponse)->link;
+                $temporaryLink = new GetTemporaryLink(false, env('DROPBOX_TOKEN', 'fake-token'));
+                $response = $temporaryLink->raw(self::BASE_FOLDER . $path);
+                $jsonResponse = $response->getBody();
+                $link = json_decode($jsonResponse)->link;
             }
         } catch (ClientException $e) { // Error on request 409 Conflicted
 
         }
 
-	return $link;
+	    return $link;
     }
 
     /**
@@ -112,9 +96,8 @@ class DropboxClass {
         $object = null;
 
         try {
-            $getMetaData = new GetMetaData(false, self::DROPBOX_TOKEN);
+            $getMetaData = new GetMetaData(false, env('DROPBOX_TOKEN', 'fake-token'));
             $response = $getMetaData->raw(self::BASE_FOLDER . $path);
-
             $object = json_decode($response->getBody());
         } catch (ClientException $e) { // Error on request 409 Conflicted
             $object = null;
@@ -133,7 +116,7 @@ class DropboxClass {
         $deleted = null;
 
         try {
-            $delete = new Delete(false, self::DROPBOX_TOKEN);
+            $delete = new Delete(false, env('DROPBOX_TOKEN', 'fake-token'));
             $response = $delete->raw(self::BASE_FOLDER . $path);
             $jsonResponse = json_decode($response->getBody());
 
@@ -146,5 +129,4 @@ class DropboxClass {
 
         return $deleted;
     }
-
 }
