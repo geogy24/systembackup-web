@@ -69,7 +69,7 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'business' => $data['business'],
+            'business' => UtilHelper::sanitizeString($data['business']),
             'user_type_id' => 2
         ]);
     }

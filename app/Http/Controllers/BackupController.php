@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 
-use App\Facades\DropboxHelper;
+use App\Facades\DropboxFacade;
 
 use App\User;
 
@@ -110,7 +110,7 @@ class BackupController extends Controller
 
         foreach ($users as $user) {
             array_push($files, ["user" => $user,
-                                "files" => DropboxHelper::listDirectory($user->business)]);
+                                "files" => DropboxFacade::listDirectory($user->business)]);
         }
         
         return $files;
@@ -123,7 +123,7 @@ class BackupController extends Controller
      * @return void
      */
     public function downloadFile(Request $request) {
-        return redirect(DropboxHelper::download($request->business . '/' . $request->name));
+        return redirect(DropboxFacade::download($request->business . '/' . $request->name));
     }
 
     /**
@@ -133,7 +133,7 @@ class BackupController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function deleteFile(Request $request) {
-        if (DropboxHelper::delete($request->business . '/' . $request->name)) {
+        if (DropboxFacade::delete($request->business . '/' . $request->name)) {
             if (Auth::user()->user_type_id == 1) {
                 return redirect()->action('BackupController@showAllCopies');
             } else {
