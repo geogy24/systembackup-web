@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Facades\DropboxClass;
+use App\Facades\DropboxHelper;
 
 use DB;
 
@@ -65,7 +65,7 @@ class UserController extends Controller
         ]);
         
         if($request->user_type == 2){
-            DropboxClass::createFolder($request->business);
+            DropboxHelper::createFolder($request->business);
         }
         
         $user = new User();
@@ -151,7 +151,7 @@ class UserController extends Controller
         $user = User::find($id);
         
         if ($user->user_type_id == 2){
-            DropboxClass::delete($user->business);
+            DropboxHelper::delete($user->business);
         }
         
         $user->delete();

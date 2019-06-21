@@ -31,8 +31,6 @@ class AuthController extends Controller
     protected $redirectTo = '/home';
     
     protected $redirectAfterLogout = '/';
-    
-    const UPLOAD_PATH = 'upload/';
 
     /**
      * Create a new authentication controller instance.
@@ -66,11 +64,7 @@ class AuthController extends Controller
      * @return User
      */
     protected function create(array $data)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $data['business'];
-        
-        mkdir($directory); // Create user's directory
-        
+    {        
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -85,5 +79,4 @@ class AuthController extends Controller
         session()->flush();
         return redirect($this->redirectAfterLogout);
     }
-    
 }
