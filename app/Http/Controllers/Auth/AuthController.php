@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\UserType;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -70,7 +71,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'business' => UtilHelper::sanitizeString($data['business']),
-            'user_type_id' => 2
+            'user_type_id' => App\UserType::userClient()
         ]);
     }
 

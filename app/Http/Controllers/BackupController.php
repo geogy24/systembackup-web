@@ -8,6 +8,8 @@ use App\Facades\DropboxFacade;
 
 use App\User;
 
+use App\UserType;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -16,9 +18,7 @@ use Alorel\Dropbox\Operation\Files\ListFolder\ListFolder;
 use Alorel\Dropbox\Options\Builder\ListFolderOptions;
 
 class BackupController extends Controller
-{
-    const CLIENT_USER = 2;
-    
+{   
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +33,7 @@ class BackupController extends Controller
         if($users != null){
             return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
-            echo 'Error: usuario no encontrado';
+            echo __('backup.error.user_not_found');
         }
     }
 
@@ -44,12 +44,12 @@ class BackupController extends Controller
      * */
     public function showAllCopies() {
         session(['link' => 'copias']);
-        $users = User::where('user_type_id','=', self::CLIENT_USER)->get();
+        $users = User::where('user_type_id','=', App\UserType::clientUser())->get();
         
         if ($users != null) {
             return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
-            echo 'Información: No hay usuarios por mostrar';
+            echo __('backup.information.not_users_show');
         }
     }
 

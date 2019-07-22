@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use App;
 use Illuminate\Support\ServiceProvider;
 
 class UtilHelperServiceProvider extends ServiceProvider
