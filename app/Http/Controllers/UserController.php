@@ -104,11 +104,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(StoreUserPutRequest $request, $id)
-    {
-        $this->validate($request, [
-            
-        ]);
-        
+    {   
         if ($id != null) {
             $user = User::find($id);
         } else {
