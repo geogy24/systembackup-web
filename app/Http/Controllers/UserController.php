@@ -18,6 +18,8 @@ use App\Facades\UtilFacade;
 
 use App\Http\Requests\StoreUserPostRequest;
 
+use App\Http\Requests\StoreUserPutRequest;
+
 use DB;
 
 use Hash;
@@ -101,12 +103,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUserPutRequest $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . (($id != null) ? $id : Auth::user()->user_id) . ',user_id',
-            'password' => 'required|min:6|confirmed',
+            
         ]);
         
         if ($id != null) {
