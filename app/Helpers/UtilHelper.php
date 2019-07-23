@@ -15,7 +15,7 @@ class UtilHelper {
      */
     public function sanitizeString($string)
     {
-        return str_replace(' ', '_', self::removeSpecialCharacters(strtolowe($string)));
+        return str_replace(' ', '_', self::removeSpecialCharacters(strtolower($string)));
     }
 
     /**

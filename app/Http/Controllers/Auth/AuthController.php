@@ -71,7 +71,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'business' => UtilHelper::sanitizeString($data['business']),
-            'user_type_id' => UserType::userClient()
+            'user_type_id' => UserType::adminClient()
         ]);
     }
 
