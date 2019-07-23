@@ -12,8 +12,15 @@ class UserType extends Model
 
     const CLIENT_USER = 2;
 
+    const ADMIN_USER = 1;
+
     public static function clientUser()
     {
         return self::CLIENT_USER;
+    }
+
+    public static function adminUser()
+    {
+        return self::ADMIN_USER;
     }
 }

@@ -88,7 +88,7 @@ class BackupController extends Controller
      */
     public function deleteFile(Request $request) {
         if (DropboxFacade::delete($request->business . '/' . $request->name)) {
-            if (Auth::user()->user_type_id == 1) {
+            if (Auth::user()->user_type_id == UserType::clientUser()) {
                 return redirect()->action('BackupController@showAllCopies');
             } else {
                 return redirect()->action('BackupController@index');
