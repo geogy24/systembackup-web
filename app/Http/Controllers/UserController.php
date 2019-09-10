@@ -16,6 +16,8 @@ use App\Facades\DropboxFacade;
 
 use App\Facades\UtilFacade;
 
+use App\Facades\SessionFacade;
+
 use App\Http\Requests\StoreUserPostRequest;
 
 use App\Http\Requests\StoreUserPutRequest;
@@ -34,7 +36,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        session(['link' => 'usuarios']);
+        // session(['link' => 'usuarios']);
+        SessionFacade::linkSelected('usuarios');
         return view('user.index', ['users' =>  User::All()]);
     }
 
