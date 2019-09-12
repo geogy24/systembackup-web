@@ -27,7 +27,6 @@ class BackupController extends Controller
      */
     public function index(Request $request)
     {
-        session(['link' => 'copias']);
         $users = collect([User::find(Auth::user()->user_id)]);
         
         if($users != null){
@@ -43,7 +42,6 @@ class BackupController extends Controller
      * @return view
      * */
     public function showAllCopies() {
-        session(['link' => 'copias']);
         $users = User::where('user_type_id','=', UserType::clientUser())->get();
         
         if ($users != null) {

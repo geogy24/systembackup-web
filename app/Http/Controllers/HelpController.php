@@ -19,8 +19,6 @@ class HelpController extends Controller
      */
     public function index(Request $request)
     {
-        session(['link' => 'ayuda']);
-        
         return view('help.index');
     }
 }

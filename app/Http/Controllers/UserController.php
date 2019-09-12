@@ -16,8 +16,6 @@ use App\Facades\DropboxFacade;
 
 use App\Facades\UtilFacade;
 
-use App\Facades\SessionFacade;
-
 use App\Http\Requests\StoreUserPostRequest;
 
 use App\Http\Requests\StoreUserPutRequest;
@@ -36,8 +34,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        // session(['link' => 'usuarios']);
-        SessionFacade::linkSelected('usuarios');
         return view('user.index', ['users' =>  User::All()]);
     }
 
@@ -108,11 +104,7 @@ class UserController extends Controller
      */
     public function update(StoreUserPutRequest $request, $id)
     {   
-        if ($id != null) {
-            $user = User::find($id);
-        } else {
-            $user = User::find(Auth::user()->user_id);
-        }
+        $user = User::find($request->route()->parameter('users'));
         
         if ($user != null) {
             $user->name = $request->name;
@@ -120,12 +112,10 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
         }
-        
-        if (Auth::user()->user_type_id == 2) {
-            return redirect()->action('BackupController@index');
-        } else {
-            return redirect()->action('UserController@index');
-        }
+
+        return redirect()->action(
+            (Auth::user()->user_type_id == UserType::clientUser()) ? 'BackupController@index' : 'UserController@index'
+        );
     }
 
     /**
@@ -138,36 +128,12 @@ class UserController extends Controller
     {
         $user = User::find($id);
         
-        if ($user->user_type_id == 2){
+        if ($user->user_type_id == UserType::clientUser()){
             DropboxFacade::delete($user->business);
         }
         
         $user->delete();
         
         return redirect()->action('UserController@index');
-    }
-    
-    /**
-     * Login in the API way
-     */
-    public function login(Request $request)
-    {
-        $finded = false;
-        $JSONData = $request->json;
-        
-        $users = DB::table('users')->where('email', $JSONData['email'])->where('user_type_id', 2)->get();
-        
-        header('Content-Type: application/json');
-        
-        foreach ($users as $user) {
-            if (Hash::check($JSONData['password'], $user->password)) {
-                echo json_encode(array("login" => true, "user_id" => $user->user_id));
-                $finded = true;
-            }
-        }
-        
-        if (!$finded) {
-            echo json_encode(array('login' => false));
-        }
     }
 }

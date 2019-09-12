@@ -9,7 +9,7 @@ class SessionHelper
      * 
      * @param string $link
      */
-    public function linkSelected($link)
+    public function selectedLink($link)
     {
         session(['link' => $link]);
     }

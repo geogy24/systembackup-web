@@ -23,10 +23,9 @@ class StoreUserPutRequest extends Request
      */
     public function rules()
     {
-        echo $this->user;
         return [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $this->user . ',user_id',
+            'email' => 'required|email|max:255|unique:users,email,' . $this->route()->parameter('users') . ',user_id',
             'password' => 'required|min:6|confirmed'
         ];
     }
