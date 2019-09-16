@@ -4,7 +4,7 @@ namespace App\Providers;
 use App;
 use Illuminate\Support\ServiceProvider;
 
-class DropboxClassServiceProvider extends ServiceProvider
+class UtilHelperServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -23,8 +23,8 @@ class DropboxClassServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        App::bind('dropboxclass', function() {
-            return new App\Helpers\DropboxClass;
+        App::bind('utilhelper', function() {
+            return new App\Helpers\UtilHelper;
         });
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\UserType;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -31,8 +32,6 @@ class AuthController extends Controller
     protected $redirectTo = '/home';
     
     protected $redirectAfterLogout = '/';
-    
-    const UPLOAD_PATH = 'upload/';
 
     /**
      * Create a new authentication controller instance.
@@ -66,17 +65,13 @@ class AuthController extends Controller
      * @return User
      */
     protected function create(array $data)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $data['business'];
-        
-        mkdir($directory); // Create user's directory
-        
+    {        
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'business' => $data['business'],
-            'user_type_id' => 2
+            'business' => UtilHelper::sanitizeString($data['business']),
+            'user_type_id' => UserType::adminClient()
         ]);
     }
 
@@ -85,5 +80,4 @@ class AuthController extends Controller
         session()->flush();
         return redirect($this->redirectAfterLogout);
     }
-    
 }

@@ -12,7 +12,7 @@ use Alorel\Dropbox\Operation\Files\GetMetadata;
 
 use GuzzleHttp\Exception\ClientException;
 
-class DropboxClass {
+class DropboxHelper {
 
     const BASE_FOLDER = '/empresas/';
 

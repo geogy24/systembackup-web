@@ -12,7 +12,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Facades\DropboxClass;
+use App\Facades\DropboxFacade;
+
+use App\Facades\UtilFacade;
+
+use App\Http\Requests\StoreUserPostRequest;
+
+use App\Http\Requests\StoreUserPutRequest;
 
 use DB;
 
@@ -21,8 +27,6 @@ use Hash;
 class UserController extends Controller
 {
     
-    const UPLOAD_PATH = 'upload/';
-    
     /**
      * Display a listing of the resource.
      *
@@ -30,10 +34,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        session(['link' => 'usuarios']);
-        $users = User::All();
-        
-        return view('user.index', ['users' => $users]);
+        return view('user.index', ['users' =>  User::All()]);
     }
 
     /**
@@ -43,9 +44,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $usersType = UserType::all();
-        
-        return view('auth.register', ['users_type' => $usersType]);
+        return view('auth.register', ['users_type' => UserType::all()]);
     }
 
     /**
@@ -54,40 +53,31 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserPostRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'business' => 'required|max:255|unique:users',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'user_type' => 'required'
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'business' => UtilFacade::sanitizeString($request->business),
+            'user_type_id' => $request->user_type
         ]);
-        
-        if($request->user_type == 2){
-            DropboxClass::createFolder($request->business);
+
+        if($user && $request->user_type == UserType::clientUser()){
+            $this->createFolder($request->business);
         }
-        
-        $user = new User();
-        $user->name = $request->name;
-        $user->business = $request->business;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->user_type_id = $request->user_type;
-        $user->save();
         
         return redirect()->action('UserController@index');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Create folder where I found the backup
+     * 
+     * @return void
      */
-    public function show($id)
+    private function createFolder($folderName)
     {
-        //
+        DropboxFacade::createFolder(UtilFacade::sanitizeString($folderName));
     }
 
     /**
@@ -112,19 +102,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . (($id != null) ? $id : Auth::user()->user_id) . ',user_id',
-            'password' => 'required|min:6|confirmed',
-        ]);
-        
-        if ($id != null) {
-            $user = User::find($id);
-        } else {
-            $user = User::find(Auth::user()->user_id);
-        }
+    public function update(StoreUserPutRequest $request, $id)
+    {   
+        $user = User::find($request->route()->parameter('users'));
         
         if ($user != null) {
             $user->name = $request->name;
@@ -132,12 +112,10 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
         }
-        
-        if (Auth::user()->user_type_id == 2) {
-            return redirect()->action('BackupController@index');
-        } else {
-            return redirect()->action('UserController@index');
-        }
+
+        return redirect()->action(
+            (Auth::user()->user_type_id == UserType::clientUser()) ? 'BackupController@index' : 'UserController@index'
+        );
     }
 
     /**
@@ -150,36 +128,12 @@ class UserController extends Controller
     {
         $user = User::find($id);
         
-        if ($user->user_type_id == 2){
-            DropboxClass::delete($user->business);
+        if ($user->user_type_id == UserType::clientUser()){
+            DropboxFacade::delete($user->business);
         }
         
         $user->delete();
         
         return redirect()->action('UserController@index');
-    }
-    
-    /**
-     * Login in the API way
-     */
-    public function login(Request $request)
-    {
-        $finded = false;
-        $JSONData = $request->json;
-        
-        $users = DB::table('users')->where('email', $JSONData['email'])->where('user_type_id', 2)->get();
-        
-        header('Content-Type: application/json');
-        
-        foreach ($users as $user) {
-            if (Hash::check($JSONData['password'], $user->password)) {
-                echo json_encode(array("login" => true, "user_id" => $user->user_id));
-                $finded = true;
-            }
-        }
-        
-        if (!$finded) {
-            echo json_encode(array('login' => false));
-        }
     }
 }
