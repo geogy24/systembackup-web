@@ -233,7 +233,7 @@
     <aside class="bg-dark">
         <div class="container text-center">
             <div class="call-to-action">
-                <h2>Inicia con nosotros</h2>
+                <h2>Empieza con nosotros</h2>
                 <a href="{{ url('/login') }}" class="btn btn-default btn-xl sr-button">Inicia sesión</a>
             </div>
         </div>

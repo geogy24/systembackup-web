@@ -19,22 +19,19 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::group(['prefix' => 'api'], function () {
-    Route::post('users/login', 'UserController@login');
-    Route::post('log/prueba', 'LogController@prueba');
-});
-
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UserController');
     Route::resource('users/{id}/destroy', 'UserController@destroy');
     
     Route::get('backups/showfiles', 'BackupController@showAllCopies');
-    Route::get('backups/downloadfile/{file_name}', 'BackupController@downloadFile');
-    Route::get('backups/deletefile/{file_name}/{user_id}', 'BackupController@deleteFile');
+    Route::get('backups/downloadfile/{business}/{name}', 'BackupController@downloadFile');
+    Route::get('backups/deletefile/{business}/{name}', 'BackupController@deleteFile');
     Route::resource('backups', 'BackupController');
     
     Route::get('logs/{id}', 'LogController@listClient');
     Route::get('logs', 'LogController@index');
+
+    Route::get('help', 'HelpController@index');
 });
 
 Route::get('/api/log/create', 'LogController@store');

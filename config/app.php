@@ -156,6 +156,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * Local service providers...
+         */
+        App\Providers\DropboxHelperServiceProvider::class,
+        App\Providers\UtilHelperServiceProvider::class,
+        App\Providers\SessionHelperServiceProvider::class
     ],
 
     /*
@@ -202,6 +208,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        /**
+         * Local aliases
+         */
+        'DropboxHelper' => App\Facades\DropboxFacade::class,       // Custom facade
+        'UtilHelper' => App\Facades\UtilFacade::class,             // Custom facade
+        'SessionHelper' => App\Facades\SessionFacade::class        // Custom facade
     ],
 
 ];

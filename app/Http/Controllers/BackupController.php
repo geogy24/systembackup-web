@@ -4,191 +4,93 @@ namespace App\Http\Controllers;
 
 use Auth;
 
+use App\Facades\DropboxFacade;
+
 use App\User;
+
+use App\UserType;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use Alorel\Dropbox\Operation\Files\ListFolder\ListFolder;
+use Alorel\Dropbox\Options\Builder\ListFolderOptions;
+
 class BackupController extends Controller
-{
-    const UPLOAD_PATH = 'upload/';
-    
+{   
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request params for HTTP
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $user = User::find(Auth::user()->user_id);
+        $users = collect([User::find(Auth::user()->user_id)]);
         
-        if($user != null){
-            return view('backup.index', ['files' => $this->_getCopies($user)]);
+        if($users != null){
+            return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
-            echo 'Error: usuario no encontrado';
+            echo __('backup.error.user_not_found');
         }
     }
-    
-    private function _getCopies($users)
-    {
-        $files = array();
-        
-        if(is_a($users, "Illuminate\Database\Eloquent\Collection")){
-            foreach ($users as $user) {
-                array_push($files, ["user" => $user->name,
-                                    "user_id" => $user->user_id,
-                                    "directory" => base_path() . '/' . self::UPLOAD_PATH . $user->business,
-                                    "files" => $this->_getFiles($user)]);
-            }
-        } else {
-            array_push($files, ["user" => $users->name, 
-                                "user_id" => $users->user_id,
-                                "directory" => base_path() . '/' . self::UPLOAD_PATH . $users->business,
-                                "files" => $this->_getFiles($users)]);
-        }
-        
-        return $files;
-    }
-    
-    private function _getFiles($user)
-    {
-        $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
 
-        if (file_exists($directory)) {
-            $files = scandir($directory);
-        }
-        
-        return $files;
-    }
-    
     /**
-     * Show copies from all directories
+     * Show copies from all users
      * 
      * @return view
      * */
-    public function showAllCopies()
-    {
-        $users = User::where('user_type_id','=', 2)->get();
+    public function showAllCopies() {
+        $users = User::where('user_type_id','=', UserType::clientUser())->get();
         
         if ($users != null) {
             return view('backup.index', ['files' => $this->_getCopies($users)]);
         } else {
-            echo 'Información: No hay usuarios por mostrar';
+            echo __('backup.information.not_users_show');
         }
     }
     
-    public function downloadFile(Request $request)
-    {
-        $user = User::find(Auth::user()->user_id);
+    /**
+     * Get list of copies from the user(s)
+     * 
+     * @param Collection $users
+     * @return array $files
+     */
+    private function _getCopies($users) {
+        $files = array();
+
+        foreach ($users as $user) {
+            array_push($files, ["user" => $user,
+                                "files" => DropboxFacade::listDirectory($user->business)]);
+        }
         
-        if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            
-            if( file_exists($directory)) {
-                // http headers for zip downloads
-                header("Pragma: public");
-                header("Expires: 0");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                header("Cache-Control: public");
-                header("Content-Description: File Transfer");
-                header("Content-type: application/octet-stream");
-                header("Content-Disposition: attachment; filename=\"" . $request->file_name . "\"");
-                header("Content-Transfer-Encoding: binary");
-                header("Content-Length: " . filesize($directory . '/' . $request->file_name));
-                ob_end_flush();
-                @readfile($directory .'/'. $request->file_name);
+        return $files;
+    }
+    
+    /**
+     * Download file from dropbox storage
+     * 
+     * @param Request $request params for HTTP
+     * @return void
+     */
+    public function downloadFile(Request $request) {
+        return redirect(DropboxFacade::download($request->business . '/' . $request->name));
+    }
+
+    /**
+     * Delete file
+     * 
+     * @param Request $request params for HTTP
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteFile(Request $request) {
+        if (DropboxFacade::delete($request->business . '/' . $request->name)) {
+            if (Auth::user()->user_type_id == UserType::clientUser()) {
+                return redirect()->action('BackupController@showAllCopies');
             } else {
-                echo '!exists';
-            }
-        } else {
-            echo 'Error: usuario no encontrado';
-        }
-    }
-    
-    public function deleteFile(Request $request)
-    {
-        $user = User::find($request->user_id);
-        
-        if($user != null){
-            $directory = base_path() . '/' . self::UPLOAD_PATH . $user->business;
-            $fileToDeleted = $directory . '/' . $request->file_name;
-            
-            if(file_exists($fileToDeleted)) {
-                if (unlink($fileToDeleted)) {
-                    if (Auth::user()->user_type_id == 1) {
-                        return redirect()->action('BackupController@showAllCopies');
-                    } else {
-                        return redirect()->action('BackupController@index');
-                    }
-                }
+                return redirect()->action('BackupController@index');
             }
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

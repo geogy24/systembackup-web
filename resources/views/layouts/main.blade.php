@@ -1,157 +1,129 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <title>System Backup</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/favicons/manifest.json">
+    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
 
-    <head>
-    
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-    
-        <title>SB Escritorio</title>
-	<link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
-	<link rel="manifest" href="favicons/manifest.json">
-	<link rel="mask-icon" href="favicons/safari-pinned-tab.svg" color="#5bbad5">
-	<meta name="theme-color" content="#ffffff">
-    
-        <!-- Bootstrap Core CSS -->
-        <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    
-        <!-- Custom CSS -->
-        <link href="/css/sb-admin.css" rel="stylesheet">
-    
-        <!-- Custom Fonts -->
-        <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-        
-        <!-- jQuery -->
-        <script src="/vendor/jquery/jquery.js"></script>
-    
-    </head>
-
-    <body>
-    
-        <div id="wrapper">
-    
-            <!-- Navigation -->
-            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @if (!Auth::guest())
-                        <div>
-                            <a class="navbar-brand logo" href="{{ url('/home') }}" style="display: inline-flex">
-                                <img src="/img/logo.png" style="width:32px; margin-right: 5px;"/>
-                                <p>System Backup</p>
-                            </a>
-                        </div>
-                    @else
-                        <div>
-                            <a class="navbar-brand logo" href="{{ url('/') }}" style="display: inline-flex">
-                                <img src="/img/logo.png" style="width:32px; margin-right: 5px;"/>
-                                <p> System Backup</p>
-                            </a>
-                        </div>
-                    @endif
-                </div>
-                <!-- Top Menu Items -->
-                <ul class="nav navbar-right top-nav">
-                    @if (!Auth::guest())
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth::user()->name }} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ url('users/' . Auth::user()->user_id . '/edit') }}"><i class="fa fa-fw fa-user"></i> Perfil</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="{{ url('/logout') }}"><i class="fa fa-fw fa-power-off"></i> Cerrar Sesión </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endif
-                </ul>
-                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav side-nav">
-                        @if (!Auth::guest())
-                            @if (Auth::user()->user_type_id == 1)
-                                <li><a href="{{ url('backups/showfiles') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
-                                <li>
-                                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Usuarios <i class="fa fa-fw fa-caret-down"></i></a>
-                                    <ul  id="demo" class="collapse">
-                                        <li><a href="{{ url('users') }}">Listar</a></li>
-                                        <li><a href="{{ url('users/create') }}">Registrar</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="{{ url('logs') }}"><i class="fa fa-fw fa-file" aria-hidden="true"></i> Logs</a></li>
-                                <li><a href=""><i class="fa fa-fw fa-question-circle" aria-hidden="true"></i> Ayuda</a></li>
-                            @elseif (Auth::user()->user_type_id == 2)
-                                @if(Session::get('copias'))
-                                    <li class="active"><a href="{{ url('backups') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
-                                @else
-                                    <li><a href="{{ url('backups') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
-                                @endif
-                                
-                                <li><a href=""><i class="fa fa-fw fa-question-circle" aria-hidden="true"></i> Ayuda</a></li>
-                            @endif
-                        @endif
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </nav>
-    
-            <div id="page-wrapper">
-                @if (!Auth::guest())
-                    <div class="container-fluid">
-        
-                        <!-- Page Heading -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h1 class="page-header">
-                                    @yield('title')
-                                    <small>@yield('subtitle')</small>
-                                </h1>
-                                <ol class="breadcrumb">
-                                    <li>
-                                        <i class="fa fa-dashboard"></i>  <a href="{{ url('/home') }}">Escritorio</a>
-                                    </li>
-                                    <li class="active">
-                                        <i class="fa fa-file"></i> @yield('title')
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                        <!-- /.row -->
+    <link rel="stylesheet" type="text/css" href="/assets/lib/perfect-scrollbar/css/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/lib/material-design-icons/css/material-design-iconic-font.min.css"/><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css"/>
+    <script src="/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="be-wrapper">
+      <nav class="navbar navbar-default navbar-fixed-top be-top-header">
+        <div class="container-fluid">
+          <div class="navbar-header">
+              <!--<a href="index.html" class="navbar-brand"></a>-->
+              <a href="{{ url('/home') }}" style="display: inline-flex">
+                <img src="/img/logo.png" style="width:50px; height:45px; margin: 10px;"/>
+              </a>
+          </div>
+          <div class="be-right-navbar">
+            <ul class="nav navbar-nav navbar-right be-user-nav">
+              <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"><img src="/assets/img/avatar.png" alt="Avatar"><span class="user-name">{{ Auth::user()->name }}</span></a>
+                <ul role="menu" class="dropdown-menu">
+                  <li>
+                    <div class="user-info">
+                      <div class="user-name">{{ Auth::user()->name }}</div>
+                      <div class="user-position online">Disponible</div>
                     </div>
-                    <!-- /.container-fluid -->
-                @endif
-                
-                @yield('content')
-                
-            </div>
-            <!-- /#page-wrapper -->
-            
+                  </li>
+                  <li><a href="{{ url('users/' . Auth::user()->user_id . '/edit') }}"><span class="icon mdi mdi-face"></span> Mi cuenta</a></li>
+                  <li><a href="{{ url('/logout') }}"><span class="icon mdi mdi-power"></span> Cerrar sesión</a></li>
+                </ul>
+              </li>
+            </ul>
+            <div class="page-title"><span>@yield('title')</span></div>
+          </div>
         </div>
-        
-        <!-- /#wrapper -->
-    
-        <!-- Bootstrap Core JavaScript -->
-        <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    
-    </body>
+      </nav>
+      <div class="be-left-sidebar">
+        <div class="left-sidebar-wrapper">
+	  <a href="#" class="left-sidebar-toggle">Escritorio</a>
+          <div class="left-sidebar-spacer">
+            <div class="left-sidebar-scroll">
+              <div class="left-sidebar-content">
+                <ul class="sidebar-elements">
+                  <li class="divider">Menú</li>
+                  @if(Session::has('link'))
+                    <li class="parent active open">
+                  @else
+                    <li class="parent">
+                  @endif
+                    <a href="#"><i class="icon mdi mdi-home"></i><span>Inicio</span></a>
+                    <ul class="sub-menu">
+                    @if (Auth::user()->user_type_id == 1)
+                      @if(Session::get('link') == 'copias')
+                        <li class="active"><a href="{{ url('backups/showfiles') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
+                      @else
+                        <li><a href="{{ url('backups/showfiles') }}"><i class="fa fa-fw fa-files-o"></i> Copias</a></li>
+                      @endif
+                      @if(Session::get('link') == 'registros')
+                        <!--<li class="active"><a href="{{ url('logs') }}">Registros</a></li>-->
+                      @else
+                        <!--<li><a href="{{ url('logs') }}">Registros</a></li>-->
+                      @endif
+                      @if(Session::get('link') == 'usuarios')
+                        <li class="active"><a href="{{ url('users') }}">Usuarios</a></li>
+                      @else
+                        <li><a href="{{ url('users') }}">Usuarios</a></li>
+                      @endif
+                      @if(Session::get('link') == 'ayuda')
+                          <li class="active"><a href="{{ url('help') }}">Ayuda</a></li>
+                      @else
+                        <li><a href="{{ url('help') }}">Ayuda</a></li>
+                      @endif
+                    @elseif (Auth::user()->user_type_id == 2)
+                        @if(Session::get('link') == 'copias')
+                          <li class="active"><a href="{{ url('backups') }}">Copias</a></li>
+                        @else
+                          <li><a href="{{ url('backups') }}">Copias</a></li>
+                        @endif
+                        @if(Session::get('link') == 'ayuda')
+                            <li class="active"><a href="{{ url('help') }}">Ayuda</a></li>
+                        @else
+                          <li><a href="{{ url('help') }}">Ayuda</a></li>
+                        @endif
+                    @endif
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="be-content">
+        @yield('breadcumbs')
+        <div class="main-content container-fluid">
+          @yield('content')
+        </div>
+      </div>
+    </div>
+    <script src="/assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+    <script src="/assets/js/main.js" type="text/javascript"></script>
+    <script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+      	//initialize the javascript
+      	App.init();
+      });
+      
+    </script>
+  </body>
 </html>
