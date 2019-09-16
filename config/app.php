@@ -159,7 +159,9 @@ return [
         /**
          * Local service providers...
          */
-        App\Providers\DropboxClassServiceProvider::class
+        App\Providers\DropboxHelperServiceProvider::class,
+        App\Providers\UtilHelperServiceProvider::class,
+        App\Providers\SessionHelperServiceProvider::class
     ],
 
     /*
@@ -209,7 +211,9 @@ return [
         /**
          * Local aliases
          */
-        'DropboxClass' => App\Facades\DropboxClass::class       // Custom facade
+        'DropboxHelper' => App\Facades\DropboxFacade::class,       // Custom facade
+        'UtilHelper' => App\Facades\UtilFacade::class,             // Custom facade
+        'SessionHelper' => App\Facades\SessionFacade::class        // Custom facade
     ],
 
 ];
